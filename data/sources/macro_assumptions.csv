@@ -1,0 +1,6 @@
+year,rpi_pct,earnings_growth_pct,note
+2027,2.9,2.25,"OBR EFO March 2026: RPI averages 2.9% from 2027 to 2029; nominal weekly pay growth averages 2.25% a year in the medium term"
+2028,2.9,2.25,"OBR EFO March 2026, as above"
+2029,2.9,2.25,"OBR EFO March 2026, as above"
+2030,2.3,2.25,"OBR EFO March 2026: RPI 2.3% in 2030"
+2031,2.0,,"From 2030 RPI is aligned with CPIH (DfE loan forecast methodology); CPI target 2%. Pay growth after 2030 is RPI plus the calibrated constant (see loans.py)"

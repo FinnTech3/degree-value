@@ -1,0 +1,4 @@
+﻿plan_type,loan_type,time_period,time_identifier,geographic_level,country_code,country_name,average_total_outlay_per_borrower_per_start_year,proportion_expected_to_fully_repay,number_of_student_entrants,median_repayment_term
+Plan 5,Higher education full time,202425,Academic year,National,E92000001,England,44690,56,z,z
+Plan 5,Total,202930,Academic year,National,E92000001,England,z,z,563000,z
+Plan 5,Total,202425,Academic year,National,E92000001,England,z,z,z,31

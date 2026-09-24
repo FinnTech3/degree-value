@@ -1,0 +1,25 @@
+﻿plan_type,repayment_threshold,time_period,time_identifier,geographic_level,country_code,country_name
+Plan 1,24990,202425,Financial year,National,E92000001,England
+Plan 1,26065,202526,Financial year,National,E92000001,England
+Plan 1,26952,202627,Financial year,National,E92000001,England
+Plan 1,27950,202728,Financial year,National,E92000001,England
+Plan 1,28817,202829,Financial year,National,E92000001,England
+Plan 1,29653,202930,Financial year,National,E92000001,England
+Plan 2,27295,202425,Financial year,National,E92000001,England
+Plan 2,28469,202526,Financial year,National,E92000001,England
+Plan 2,29437,202627,Financial year,National,E92000001,England
+Plan 2,30527,202728,Financial year,National,E92000001,England
+Plan 2,31474,202829,Financial year,National,E92000001,England
+Plan 2,32387,202930,Financial year,National,E92000001,England
+Plan 3,21000,202425,Financial year,National,E92000001,England
+Plan 3,21000,202526,Financial year,National,E92000001,England
+Plan 3,21605,202627,Financial year,National,E92000001,England
+Plan 3,22275,202728,Financial year,National,E92000001,England
+Plan 3,23015,202829,Financial year,National,E92000001,England
+Plan 3,23870,202930,Financial year,National,E92000001,England
+Plan 5,25000,202425,Financial year,National,E92000001,England
+Plan 5,25000,202526,Financial year,National,E92000001,England
+Plan 5,25000,202627,Financial year,National,E92000001,England
+Plan 5,25925,202728,Financial year,National,E92000001,England
+Plan 5,26729,202829,Financial year,National,E92000001,England
+Plan 5,27505,202930,Financial year,National,E92000001,England

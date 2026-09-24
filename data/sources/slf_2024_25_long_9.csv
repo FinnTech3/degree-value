@@ -1,0 +1,20 @@
+plan_type,course_start_year,study_type,sex,lifetime_earning_decile,average_loan_balance_at_srdd_nominal,average_loan_balance_at_srdd_real_terms,average_lifetime_repayments_real_terms,proportion_of_outlay_repaid_real_terms,median_length_of_repayment,time_period,time_identifier,geographic_level,country_code,country_name
+Plan 5,2024,Total,Total,1,44300,37700,3900,10,40,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,2,45200,38500,8900,23,40,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,3,43500,37000,14300,39,40,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,4,44600,37900,21600,57,40,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,5,44800,38100,28000,73,39.5,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,6,45500,38700,34400,89,33,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,7,45600,38700,38000,98,27,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,8,46300,39400,40000,102,23,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,9,47100,40000,41300,103,18.5,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,10,48200,40800,42200,103,13,202425,Academic year,National,E92000001,England
+Plan 5,2024,Higher education full time,F,Total,48000,40800,28100,69,34.5,202425,Academic year,National,E92000001,England
+Plan 5,2024,Higher education full time,M,Total,47800,40600,31200,77,28,202425,Academic year,National,E92000001,England
+Plan 5,2024,Higher education full time,Total,Total,47900,40700,29500,72,31.5,202425,Academic year,National,E92000001,England
+Plan 5,2024,Higher education part time,F,Total,12700,10700,7400,69,21,202425,Academic year,National,E92000001,England
+Plan 5,2024,Higher education part time,M,Total,11800,10000,7800,78,18,202425,Academic year,National,E92000001,England
+Plan 5,2024,Higher education part time,Total,Total,12400,10400,7500,72,20,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,F,Total,45300,38600,26600,69,34,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,M,Total,45900,39000,30000,77,27,202425,Academic year,National,E92000001,England
+Plan 5,2024,Total,Total,Total,45600,38700,28000,72,31,202425,Academic year,National,E92000001,England

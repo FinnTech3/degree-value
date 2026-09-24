@@ -107,7 +107,9 @@ class PathPoint:
     sex: str               # "Total", "Male" or "Female"
     subject: str           # subject name, or "Total"
     graduates: float | None
+    lower_quartile: float | None
     median: float | None
+    upper_quartile: float | None
     sustained: float | None
 
 
@@ -118,7 +120,8 @@ def load_paths(path: str | None = None) -> list[PathPoint]:
     with open(path, newline="", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             out.append(PathPoint(int(r["YAG"].split()[0]), r["sex"], r["subject_name"],
-                                 _number(r["grads"]), _number(r["earnings_median"]),
+                                 _number(r["grads"]), _number(r["earnings_LQ"]),
+                                 _number(r["earnings_median"]), _number(r["earnings_UQ"]),
                                  _number(r["sust_emp_fs_or_both"])))
     return out
 
