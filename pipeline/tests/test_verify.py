@@ -39,3 +39,14 @@ def test_percentile_definitions_on_a_known_case():
     assert verify.percentile_type1(v, 0.05) == 1.0
     assert verify.percentile_type1(v, 0.95) == 10.0
     assert abs(verify.percentile_type7(v, 0.95) - 9.55) < 1e-9
+
+
+def test_national_headline_is_reproduced():
+    r = verify.check_national_headline(sources.load_paths(), sources.load_national_headline())
+    assert r.passed, r.summary
+
+
+def test_twin_the_sex_gap_measured_against_women_does_not_match():
+    r = verify.check_national_headline(sources.load_paths(), sources.load_national_headline(),
+                                       gap=verify.sex_gap_share_of_women)
+    assert not r.passed

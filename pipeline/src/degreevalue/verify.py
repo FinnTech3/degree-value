@@ -26,7 +26,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 
-from .sources import Row, provider_totals
+from .sources import PathPoint, Row, provider_totals
 
 PUBLISHED = {
     "earnings, all graduates": (20_400, 42_000),
@@ -90,4 +90,31 @@ def check_published_ranges(rows: list[Row], percentile=percentile_type1) -> Resu
         len(matched) == len(PUBLISHED),
         f"{2 * len(matched)} of {2 * len(PUBLISHED)} published numbers reproduced. {lines}",
         {"rebuilt": rebuilt, "matched": matched},
+    )
+
+
+def sex_gap_share_of_men(men: float, women: float) -> float:
+    return 100 * (men - women) / men
+
+
+def sex_gap_share_of_women(men: float, women: float) -> float:
+    return 100 * (men - women) / women
+
+
+def check_national_headline(paths: list[PathPoint], published: dict[str, float],
+                            gap=sex_gap_share_of_men) -> Result:
+    """The national release's headline: first-degree median, share in work or
+    study, and the gap between men's and women's medians, five years out."""
+    at5 = {p.sex: p for p in paths if p.years_after == 5 and p.subject == "Total"}
+    rebuilt = {
+        "median": at5["Total"].median,
+        "sustained": at5["Total"].sustained,
+        "sex_gap": round(gap(at5["Male"].median, at5["Female"].median), 1),
+    }
+    matched = [k for k in published if rebuilt[k] == published[k]]
+    return Result(
+        "national headline",
+        len(matched) == len(published),
+        "; ".join(f"{k} {rebuilt[k]:g} (published {published[k]:g})" for k in published),
+        {"rebuilt": rebuilt},
     )

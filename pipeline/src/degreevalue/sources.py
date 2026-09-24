@@ -99,3 +99,33 @@ def load_salaries(path: str | None = None) -> list[Salary]:
                 continue
             out.append(Salary(int(r["time_period"]), r["age_band"], r["graduate_type"], r["sex"], m))
     return out
+
+
+@dataclass(frozen=True)
+class PathPoint:
+    years_after: int
+    sex: str               # "Total", "Male" or "Female"
+    subject: str           # subject name, or "Total"
+    graduates: float | None
+    median: float | None
+    sustained: float | None
+
+
+def load_paths(path: str | None = None) -> list[PathPoint]:
+    """National LEO, 2022-23 tax year: first-degree earnings 1, 3, 5 and 10 years out."""
+    path = path or os.path.join(DERIVED, "leo_paths_2022_23.csv")
+    out = []
+    with open(path, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            out.append(PathPoint(int(r["YAG"].split()[0]), r["sex"], r["subject_name"],
+                                 _number(r["grads"]), _number(r["earnings_median"]),
+                                 _number(r["sust_emp_fs_or_both"])))
+    return out
+
+
+def load_national_headline(path: str | None = None) -> dict[str, float]:
+    path = path or os.path.join(SOURCES, "leo_national_headline_figures.csv")
+    with open(path, newline="", encoding="utf-8") as f:
+        row = next(csv.DictReader(f))
+    return {"median": float(row["median_nominal_fd"]), "sustained": float(row["sust_emp_fs_both_fd"]),
+            "sex_gap": float(row["sex_gap"])}
