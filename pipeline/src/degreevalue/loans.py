@@ -34,17 +34,21 @@ much.
 
 The tuned number. From 2031, when the OBR's forecast ends, economy-wide pay
 grows at RPI plus a constant, and that constant is the one number set so the
-model's share repaying in full equals the DfE's 56%. It comes out close to zero
-real growth, well below the OBR's long-run productivity assumption of 1.4% a
-year. The model is then judged on what it was not tuned to: the median length
-of repayment, the share of the loan repaid, and the length of repayment in each
-tenth of lifetime earnings.
+model's share repaying in full equals the DfE's 56%. It comes out at about 0.3%
+a year. The model is then judged on what it was not tuned to. It matches the
+median length of repayment (32 years against 31.5) and the bottom half of
+earners repaying for the full term. It misses in two stated ways: it collects
+about 5% less over the term than the DfE forecasts, and because each graduate
+keeps their rank for life, the best-paid half finishes three to six years
+sooner than the DfE expects. Tests pin both gaps so neither can drift unseen.
 
 Money. Earnings are moved from 2022-23 pounds to each future year with actual
 average weekly earnings to mid-2026 (ONS series KAB9) and the OBR's forecast
 after that. Repayments are 9% of earnings above the threshold, which is £25,000
 to 2026-27, the DfE's published uprated values to 2029-30, and RPI-uprated
 after. Interest is RPI. All balances and payments are held in whole pence.
+Real values are in 2024-25 prices, starting from the DfE's own ratio of real
+to nominal balance at the start of repayment and adding 2% CPI a year after.
 """
 
 from __future__ import annotations
@@ -163,8 +167,14 @@ def dfe_targets() -> dict:
     ft = next(r for r in rows if r["study_type"] == "Higher education full time" and r["sex"] == "Total")
     key = next(r for r in _csv("slf_2024_25_key_statistics_ay.csv")
                if r["loan_type"] == "Higher education full time")
+    nominal = float(ft["average_loan_balance_at_srdd_nominal"])
+    real = float(ft["average_loan_balance_at_srdd_real_terms"])
     return {
-        "balance_nominal": float(ft["average_loan_balance_at_srdd_nominal"]),
+        "balance_nominal": nominal,
+        "balance_real": real,
+        # the DfE's own price level at the start of repayment, relative to 2024-25
+        "deflator_at_start": nominal / real,
+        "repayments_real": float(ft["average_lifetime_repayments_real_terms"]),
         "median_years": float(ft["median_length_of_repayment"]),
         "share_repaid_real": float(ft["proportion_of_outlay_repaid_real_terms"]) / 100,
         "full_repayment_share": float(key["proportion_expected_to_fully_repay"]) / 100,
@@ -276,12 +286,16 @@ class Outcome:
 
 
 def repay(balance_pence: int, earnings: list[int], rpi: dict[int, float], threshold: dict[int, int],
-          cpi: float = 0.02) -> Outcome:
+          cpi: float = 0.02, first_deflator: float = 1.0) -> Outcome:
     """Run one loan through its term: interest added, then 9% above the threshold
-    collected, each year, until it is cleared or written off."""
+    collected, each year, until it is cleared or written off.
+
+    Real values are in 2024-25 prices. `first_deflator` is the price level of
+    the first repayment year relative to 2024-25; each later year adds `cpi`.
+    """
     balance = balance_pence
     paid = paid_real = earned_real = 0
-    deflator = 1.0
+    deflator = first_deflator / (1 + cpi)
     for k, e in enumerate(earnings):
         year = FIRST_YEAR + k
         deflator *= (1 + cpi)
@@ -309,18 +323,21 @@ class Graduate:
 
 
 def simulate(profs: list[Profile], real_growth: float, balance_pounds: float, phi: float = 1.0,
-             people: int = 400, seed: int = 2024) -> list[Graduate]:
+             people: int = 400, seed: int = 2024, first_deflator: float | None = None) -> list[Graduate]:
     """Every graduate the model follows. Deterministic: each subject and sex has
     its own seeded generator, so the same inputs give the same answer."""
     pay, rpi, thr, ages = pay_index(real_growth), rpi_path(), thresholds(), age_profile()
     balance = round(balance_pounds * 100)
+    if first_deflator is None:
+        first_deflator = dfe_targets()["deflator_at_start"]
     out = []
     for prof in profs:
         rng = random.Random(f"{seed}:{prof.subject}:{prof.sex}")
         w = prof.graduates / people
         for _ in range(people):
             path = earnings_path(prof, ages[prof.sex], phi, pay, rng)
-            out.append(Graduate(prof.subject, prof.sex, w, repay(balance, path, rpi, thr)))
+            out.append(Graduate(prof.subject, prof.sex, w,
+                                repay(balance, path, rpi, thr, first_deflator=first_deflator)))
     return out
 
 
@@ -334,18 +351,21 @@ def summarise(grads: list[Graduate], balance_pounds: float) -> dict:
         deciles[min(9, int(10 * acc / total))].append(g)
         acc += g.weight
     by = {}
-    real_outlay = balance_pounds * 100 / 1.02 ** 4   # 2028 balance in 2024-25 prices
+    # the balance at the start of repayment in 2024-25 prices, at the DfE's own price level
+    real_outlay = balance_pounds * 100 / dfe_targets()["deflator_at_start"]
     for i, d in enumerate(deciles, 1):
         yrs = [g.outcome.years for g in d]
         weights = [g.weight for g in d]
         by[i] = {
             "years": weighted_median(yrs, weights),
             "share_repaid_real": sum(g.outcome.repaid_real * g.weight for g in d) / sum(weights) / real_outlay,
+            "repayments_real": sum(g.outcome.repaid_real * g.weight for g in d) / sum(weights) / 100,
         }
     all_years = weighted_median([g.outcome.years for g in grads], [g.weight for g in grads])
     share_real = sum(g.outcome.repaid_real * g.weight for g in grads) / total / real_outlay
+    repaid_real = sum(g.outcome.repaid_real * g.weight for g in grads) / total / 100
     return {"full_repayment_share": full, "median_years": all_years, "share_repaid_real": share_real,
-            "by_decile": by}
+            "repayments_real": repaid_real, "by_decile": by}
 
 
 def weighted_median(values: list[float], weights: list[float]) -> float:
