@@ -20,6 +20,8 @@ def test_all_eight_published_numbers_are_reproduced():
 
 def test_twin_the_default_percentile_does_not_reproduce_them():
     r = verify.check_published_ranges(list(rows()), verify.percentile_type7)
+    # it misses the top end of two ranges: all graduates and men
+    assert r.detail["numbers_matched"] == 6
     assert not r.passed
 
 

@@ -82,14 +82,15 @@ def provider_ranges(rows: list[Row], percentile=percentile_type1) -> dict[str, t
 def check_published_ranges(rows: list[Row], percentile=percentile_type1) -> Result:
     rebuilt = provider_ranges(rows, percentile)
     matched = [k for k in PUBLISHED if rebuilt[k] == PUBLISHED[k]]
+    numbers = sum(a == b for k in PUBLISHED for a, b in zip(rebuilt[k], PUBLISHED[k]))
     lines = "; ".join(f"{k}: {rebuilt[k][0]:g} to {rebuilt[k][1]:g} "
                       f"({'matches' if k in matched else 'published ' + str(PUBLISHED[k])})"
                       for k in PUBLISHED)
     return Result(
         "published provider ranges",
         len(matched) == len(PUBLISHED),
-        f"{2 * len(matched)} of {2 * len(PUBLISHED)} published numbers reproduced. {lines}",
-        {"rebuilt": rebuilt, "matched": matched},
+        f"{numbers} of {2 * len(PUBLISHED)} published numbers reproduced. {lines}",
+        {"rebuilt": rebuilt, "matched": matched, "numbers_matched": numbers},
     )
 
 
