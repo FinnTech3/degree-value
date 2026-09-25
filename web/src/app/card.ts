@@ -67,20 +67,33 @@ export function drawCard(canvas: HTMLCanvasElement, c: CardContent): void {
   ctx.fillStyle = SOFT;
   ctx.font = '400 40px "IBM Plex Sans", sans-serif';
   let y = P + 150;
-  for (const line of wrap(
-    ctx,
-    `A Plan 5 student loan, ${c.subject}, a graduate at the ${c.place}th place in 100`,
-    inner,
-  )) {
+  const who = c.place === 50 ? `the median ${c.subject} graduate` : `a ${c.subject} graduate at ${c.place} in 100`;
+  for (const line of wrap(ctx, `A Plan 5 student loan, for ${who}`, inner)) {
     ctx.fillText(line, P, y);
     y += 52;
   }
+
+  // the number of years, as large as fits beside the word "years"
+  const years = Number.parseInt(c.big, 10) || 0;
   ctx.fillStyle = TEXT;
-  ctx.font = '700 280px "IBM Plex Sans Condensed", sans-serif';
-  ctx.fillText(c.big, P - 8, y + 240);
+  let size = 300;
+  const measure = () => {
+    ctx.font = `700 ${size}px "IBM Plex Sans Condensed", sans-serif`;
+    const n = ctx.measureText(String(years)).width;
+    ctx.font = `700 ${Math.round(size / 3)}px "IBM Plex Sans Condensed", sans-serif`;
+    return n + 24 + ctx.measureText("years").width;
+  };
+  while (measure() > inner && size > 120) size -= 10;
+  const base = y + size * 0.82;
+  ctx.font = `700 ${size}px "IBM Plex Sans Condensed", sans-serif`;
+  ctx.fillText(String(years), P - 6, base);
+  const numWidth = ctx.measureText(String(years)).width;
+  ctx.font = `700 ${Math.round(size / 3)}px "IBM Plex Sans Condensed", sans-serif`;
+  ctx.fillText("years", P + numWidth + 18, base);
+  y = base + 80;
   ctx.font = '600 52px "IBM Plex Sans", sans-serif';
-  ctx.fillText(c.unit, P, y + 320);
-  y += 420;
+  ctx.fillText(c.unit, P, y);
+  y += 90;
   ctx.font = '400 40px "IBM Plex Sans", sans-serif';
   for (const text of c.lines) {
     for (const line of wrap(ctx, text, inner)) {
@@ -91,7 +104,6 @@ export function drawCard(canvas: HTMLCanvasElement, c: CardContent): void {
   }
 
   // forty years as a strip, the years repaid lit
-  const years = Number.parseInt(c.big, 10) || 0;
   const slot = inner / 40;
   for (let i = 0; i < 40; i++) {
     ctx.fillStyle = i < years ? YOU : REST;

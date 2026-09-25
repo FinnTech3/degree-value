@@ -38,6 +38,8 @@ export function UniChart({ unis, chosen, subject }: Props) {
   // flip the label to the left of the dot when it would run off the right edge
   const labelWidth = pick ? (pick.u.name.length + 9) * 7.6 : 0;
   const end = pick ? pick.cx + 8 + labelWidth > W - 4 && pick.cx - 8 - labelWidth >= 0 : false;
+  // when it fits on neither side, slide it left until it fits
+  const labelX = pick ? (end ? pick.cx - 8 : Math.max(4, Math.min(pick.cx + 8, W - labelWidth - 4))) : 0;
   const ticks: number[] = [];
   for (let v = lo; v <= hi; v += 10_000) ticks.push(v);
 
@@ -61,7 +63,7 @@ export function UniChart({ unis, chosen, subject }: Props) {
         {pick && (
           <>
             <line className="c-you-line" x1={pick.cx} x2={pick.cx} y1={22} y2={cy(pick.level) - r - 2} />
-            <text className="c-strong c-halo" x={pick.cx + (end ? -8 : 8)} y={26} textAnchor={end ? "end" : "start"}>
+            <text className="c-strong c-halo" x={labelX} y={26} textAnchor={end ? "end" : "start"}>
               {`${pick.u.name}: ${gbp(pick.u.y5!)}`}
             </text>
           </>
