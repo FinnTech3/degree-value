@@ -69,6 +69,11 @@ def main() -> int:
     print(f"  spread of log median pay across subjects: all graduates {g['spread_all']:.3f}, "
           f"same grades {g['spread_same_grades']:.3f}, narrowing {g['narrowing']:.0%}")
 
+    g = r["glms_2024"]
+    print("\nThe raw gap, 2024, England, full-time median salary (graduate labour market statistics)")
+    for band in ("21-30", "16-64"):
+        print(f"  aged {band}: graduates {money(g[(band, 'Graduate')])}, non-graduates {money(g[(band, 'Non-graduate')])}")
+
     ob = [d for d in r["providers"].get("Economics", []) if "Brookes" in d["name"]]
     for d in ob:
         y5 = d["years"].get(5, {})

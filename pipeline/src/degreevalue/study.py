@@ -152,8 +152,12 @@ def run() -> dict:
     y10 = {s: v[10].median for s, v in sp.items()}
     r1, r10 = ranks(y1), ranks(y10)
 
+    glms = {(x.age_band, x.group): x.median for x in sources.load_salaries()
+            if x.year == 2024 and x.sex == "Total"}
+
     return {
         "checks": checks,
+        "glms_2024": glms,
         "targets": t,
         "growth": growth,
         "summary": summary,
