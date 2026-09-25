@@ -135,3 +135,20 @@ def test_a_better_paid_place_never_takes_longer_to_repay():
                 if p.subject == "Law" and p.sex == "Total")
     years = [loans.at_rank(prof, q / 20, 0.003, t["balance_nominal"]).years for q in range(1, 20)]
     assert all(a >= b for a, b in zip(years, years[1:]))
+
+
+def test_the_share_clearing_the_loan_is_the_place_where_it_starts_being_cleared():
+    t = loans.dfe_targets()
+    prof = next(p for p in loans.profiles(sources.load_paths(), include_total=True)
+                if p.subject == "Law" and p.sex == "Total")
+    share = loans.clearing_share(prof, 0.003, t["balance_nominal"])
+    assert loans.at_rank(prof, 1 - share + 1e-6, 0.003, t["balance_nominal"]).repaid_in_full
+    assert not loans.at_rank(prof, 1 - share - 1e-6, 0.003, t["balance_nominal"]).repaid_in_full
+
+
+def test_graduates_not_in_work_repay_nothing():
+    t = loans.dfe_targets()
+    prof = next(p for p in loans.profiles(sources.load_paths(), include_total=True)
+                if p.subject == "Economics" and p.sex == "Total")
+    o = loans.at_rank(prof, prof.not_working / 2, 0.003, t["balance_nominal"])
+    assert o.repaid_nominal == 0 and o.years == loans.TERM_YEARS

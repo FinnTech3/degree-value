@@ -13,7 +13,7 @@ import statistics
 
 from . import loans, sources, verify
 
-PLACES = [i / 100 for i in range(5, 96)]   # 5th to 95th place among graduates in work
+PLACES = [i / 100 for i in range(5, 96)]   # 5th to 95th place among a subject's graduates
 PHI_RANGE = 0.9                            # the "ranks move" end of the range
 
 
@@ -78,6 +78,7 @@ def providers(rows: list[sources.Row]) -> dict[str, list[dict]]:
 
 
 def loan_by_subject(grads: list[loans.Graduate]) -> dict[str, dict]:
+    """Each subject's outcome from a simulation: used for the ranks-moving range."""
     groups: dict[str, list[loans.Graduate]] = {}
     for g in grads:
         groups.setdefault(g.subject, []).append(g)
@@ -86,10 +87,24 @@ def loan_by_subject(grads: list[loans.Graduate]) -> dict[str, dict]:
         w = [g.weight for g in gs]
         total = sum(w)
         out[subject] = {
-            "graduates": total,
             "full": sum(g.weight for g in gs if g.outcome.repaid_in_full) / total,
             "median_years": loans.weighted_median([g.outcome.years for g in gs], w),
-            "median_repaid_real": loans.weighted_median([g.outcome.repaid_real / 100 for g in gs], w),
+        }
+    return out
+
+
+def loan_by_subject_exact(profs: dict[str, loans.Profile], growth: float, balance: float) -> dict[str, dict]:
+    """Each subject's outcome in the central run, from its all-graduates
+    earnings: the median graduate's loan exactly, and the exact share who clear
+    it. These are the numbers the app's slider shows at its middle."""
+    out = {}
+    for subject, p in profs.items():
+        mid = loans.at_rank(p, 0.5, growth, balance)
+        out[subject] = {
+            "graduates": p.graduates,
+            "full": loans.clearing_share(p, growth, balance),
+            "median_years": mid.years,
+            "median_repaid_real": mid.repaid_real / 100,
         }
     return out
 
@@ -103,27 +118,32 @@ def run() -> dict:
         verify.check_national_headline(paths, sources.load_national_headline()),
     ]
 
-    # loans: the central run, ranks fixed for life
+    # loans: calibrated on women and men separately, against the DfE's national forecast
     t = loans.dfe_targets()
     profs = loans.profiles(paths)
     growth = loans.calibrate(profs, t["balance_nominal"], t["full_repayment_share"])
     grads = loans.simulate(profs, growth, t["balance_nominal"])
     summary = loans.summarise(grads, t["balance_nominal"])
-    by_subject = loan_by_subject(grads)
+
+    # each subject, from its all-graduates earnings, exactly
+    everyone = {p.subject: p for p in loans.profiles(paths, include_total=True) if p.sex == "Total"}
+    by_subject = loan_by_subject_exact(everyone, growth, t["balance_nominal"])
 
     # the other end of the range: ranks move from year to year
     growth_moving = loans.calibrate(profs, t["balance_nominal"], t["full_repayment_share"], phi=PHI_RANGE,
                                     lo=-0.04, hi=0.02)
-    grads_moving = loans.simulate(profs, growth_moving, t["balance_nominal"], phi=PHI_RANGE)
-    summary_moving = loans.summarise(grads_moving, t["balance_nominal"])
-    by_subject_moving = loan_by_subject(grads_moving)
+    summary_moving = loans.summarise(loans.simulate(profs, growth_moving, t["balance_nominal"], phi=PHI_RANGE),
+                                     t["balance_nominal"])
+    by_subject_moving = loan_by_subject(loans.simulate(list(everyone.values()), growth_moving,
+                                                       t["balance_nominal"], phi=PHI_RANGE))
 
     written_off = [s for s, v in by_subject.items() if v["median_years"] >= loans.TERM_YEARS]
     all_grads = sum(v["graduates"] for v in by_subject.values())
 
-    # every place among graduates in work, for the app: exact at fixed ranks
-    places = {}
+    # every place on the app's slider: exact at fixed ranks
+    places, all_profiles = {}, {}
     for p in loans.profiles(paths, include_total=True):
+        all_profiles[(p.subject, p.sex)] = p
         places[(p.subject, p.sex)] = [loans.at_rank(p, q, growth, t["balance_nominal"]) for q in PLACES]
 
     # earnings paths
@@ -144,6 +164,7 @@ def run() -> dict:
         "written_off": sorted(written_off),
         "written_off_share": sum(by_subject[s]["graduates"] for s in written_off) / all_grads,
         "places": places,
+        "profiles": all_profiles,
         "paths": sp,
         "all_paths": paths,
         "rank_correlation": spearman(y1, y10),

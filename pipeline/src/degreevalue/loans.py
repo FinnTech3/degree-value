@@ -362,15 +362,31 @@ def simulate(profs: list[Profile], real_growth: float, balance_pounds: float, ph
 
 def at_rank(profile: Profile, place: float, real_growth: float, balance_pounds: float) -> Outcome:
     """The loan of a graduate who stays at one place among their subject's
-    graduates in work for life: `place` 0.5 is the median earner in work.
+    graduates for life: `place` 0.5 is the median graduate. The lowest places,
+    up to the share not in sustained work or study, earn nothing.
 
     With ranks fixed, as in the central run, this is exact rather than a
     simulation, which is what lets the app show every place on a slider.
     """
-    u = profile.not_working + place * (1 - profile.not_working)
-    earnings = earnings_for(profile, age_profile()[profile.sex], [u] * TERM_YEARS, pay_index(real_growth))
+    earnings = earnings_for(profile, age_profile()[profile.sex], [place] * TERM_YEARS, pay_index(real_growth))
     return repay(round(balance_pounds * 100), earnings, rpi_path(), thresholds(),
                  first_deflator=dfe_targets()["deflator_at_start"])
+
+
+def clearing_share(profile: Profile, real_growth: float, balance_pounds: float, steps: int = 30) -> float:
+    """The share of a subject's graduates who clear the loan before it is
+    written off. Better-paid places never take longer, so there is one place
+    above which everyone clears it; this finds it by bisection."""
+    if not at_rank(profile, 1 - 1e-9, real_growth, balance_pounds).repaid_in_full:
+        return 0.0
+    lo, hi = 0.0, 1 - 1e-9
+    for _ in range(steps):
+        mid = (lo + hi) / 2
+        if at_rank(profile, mid, real_growth, balance_pounds).repaid_in_full:
+            hi = mid
+        else:
+            lo = mid
+    return 1 - hi
 
 
 def summarise(grads: list[Graduate], balance_pounds: float) -> dict:

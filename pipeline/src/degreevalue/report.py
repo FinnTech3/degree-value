@@ -40,12 +40,13 @@ def main() -> int:
     print(f"  with ranks moving (phi 0.9): growth RPI {100 * r['growth_moving']:+.2f}%, median years "
           f"{m['median_years']}, repayments {money(m['repayments_real'])}")
 
-    print("\nBy subject: repay in full, median years, median repaid in 2024-25 prices (ranks moving in brackets)")
+    print("\nBy subject, all graduates: share who clear it, the median graduate's years and total repaid in 2024-25")
+    print("prices (with ranks moving, in brackets)")
     bs, bm = r["by_subject"], r["by_subject_moving"]
     for subj in sorted(bs, key=lambda k: (bs[k]["median_years"], -bs[k]["full"])):
         a, b = bs[subj], bm[subj]
         print(f"  {subj:<42} {a['full']:>4.0%} ({b['full']:.0%})  {a['median_years']:>2}y ({b['median_years']})  "
-              f"{money(a['median_repaid_real']):>8} ({money(b['median_repaid_real'])})")
+              f"{money(a['median_repaid_real']):>8}")
     wo = r["written_off"]
     print(f"  median graduate still repaying at write-off: {len(wo)} of {len(bs)} subjects, "
           f"{r['written_off_share']:.0%} of graduates")

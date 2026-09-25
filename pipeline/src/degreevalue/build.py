@@ -36,11 +36,14 @@ def payload() -> dict:
     provider_index: dict[str, int] = {}
     for name in sorted(r["by_subject"]):
         a, b = r["by_subject"][name], r["by_subject_moving"][name]
-        paths, places = {}, {}
+        paths, places, not_working = {}, {}, {}
         for sex in SEXES:
             pts = {p.years_after: p for p in r["all_paths"] if p.subject == name and p.sex == sex}
             paths[sex] = {str(y): [pts[y].lower_quartile, pts[y].median, pts[y].upper_quartile]
                           for y in (1, 3, 5, 10) if y in pts}
+            prof = r["profiles"].get((name, sex))
+            if prof:
+                not_working[sex] = round(prof.not_working, 4)
             outcomes = r["places"].get((name, sex))
             if outcomes:
                 places[sex] = {"years": [o.years for o in outcomes],
@@ -61,7 +64,7 @@ def payload() -> dict:
             "full": a["full"], "years": a["median_years"], "repaid": round(a["median_repaid_real"]),
             "full_moving": b["full"], "years_moving": b["median_years"],
             "rank1": r["rank_year1"].get(name), "rank10": r["rank_year10"].get(name),
-            "paths": paths, "places": places, "universities": unis,
+            "paths": paths, "places": places, "not_working": not_working, "universities": unis,
         })
     t, s = r["targets"], r["summary"]
     return {
