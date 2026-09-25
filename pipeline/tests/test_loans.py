@@ -116,3 +116,22 @@ def test_simulation_is_deterministic():
     a = loans.simulate(profs, 0.003, t["balance_nominal"], people=20)
     b = loans.simulate(profs, 0.003, t["balance_nominal"], people=20)
     assert a == b
+
+
+def test_the_middle_earner_in_work_earns_exactly_the_published_median():
+    profs = loans.profiles(sources.load_paths(), include_total=True)
+    econ = next(p for p in profs if p.subject == "Economics" and p.sex == "Total")
+    u = econ.not_working + 0.5 * (1 - econ.not_working)
+    pay = {y: 1.0 for y in range(2020, 2080)}
+    year5 = loans.earnings_for(econ, loans.age_profile()["Total"], [u] * 40, pay)[4] / 100
+    published = next(p.median for p in sources.load_paths()
+                     if p.subject == "Economics" and p.sex == "Total" and p.years_after == 5)
+    assert abs(year5 - published) <= 0.01
+
+
+def test_a_better_paid_place_never_takes_longer_to_repay():
+    t = loans.dfe_targets()
+    prof = next(p for p in loans.profiles(sources.load_paths(), include_total=True)
+                if p.subject == "Law" and p.sex == "Total")
+    years = [loans.at_rank(prof, q / 20, 0.003, t["balance_nominal"]).years for q in range(1, 20)]
+    assert all(a >= b for a, b in zip(years, years[1:]))

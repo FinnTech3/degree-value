@@ -1,0 +1,56 @@
+variable,name,unit
+tax_year,Tax year,
+YAG,Years after graduation,
+provider_country_name,Country,
+provider_region_name,Region,
+provider_name,Provider Name,
+provider_type,Provider Type,
+cah2_subject_name,Subject studied,
+characteristic_type,Graduate characteristic,
+characteristic_value,Characteristic value,
+sust_emp_with_or_without_fs,Sustained employment with or without further study,%
+sust_emp_only,Sustained employment only,%
+fs_with_or_without_sust_emp,Further study with or without sustained employment,%
+fs_only,Further study only,%
+no_sust_dest,No sustained destination,%
+sust_emp_fs_or_both,Sustained employment or further study,%
+activity_not_captured,Activity unknown,%
+provider_geog,Provider/Aggregation,
+earnings_lower,Minimum Earnings,£
+earnings_LQ,Lower Quartile of Earnings,£
+earnings_median,Median Earnings,£
+earnings_UQ,Upper Quartile of Earnings,£
+earnings_upper,Maximum Earnings,£
+earnings_adjusted_lower,Minimum Earnings (Region Adjusted),£
+earnings_adjusted_LQ,Lower Quartile of Earnings (Region Adjusted),£
+earnings_adjusted_median,Median Earnings (Region Adjusted),£
+earnings_adjusted_UQ,Upper Quartile of Earnings (Region Adjusted),£
+earnings_adjusted_upper,Maximum Earnings (Region Adjusted),£
+sex,Sex,
+ethnicity,Ethnicity,
+POLAR4,POLAR4 Quintile,
+prior_attainment_code,Prior Attainment,
+F,Female,
+M,Male,
+All graduates,All Graduates,
+POLAR4_1,1st Quintile,
+POLAR4_2,2nd Quintile,
+POLAR4_3,3rd Quintile,
+POLAR4_4,4th Quintile,
+POLAR4_5,5th Quintile,
+prior_attainment_1,4 As or more,
+prior_attainment_2,360 points (e.g. 3 As in A Levels),
+prior_attainment_3,300-359 points (e.g. better than 3 Bs),
+prior_attainment_4,240-299 points (e.g. better than 3 Cs),
+prior_attainment_5,180-239 points (e.g. better than 3 Ds),
+prior_attainment_6,Below 180 points,
+prior_attainment_7,1 or 2 A level passes,
+prior_attainment_8,BTEC,
+prior_attainment_9,Other,
+low,Low,
+z,Zero,
+c,Suppressed,
+grads_earnings_include,Graduates included in earnings figures,
+grads,Graduates,
+grads_uk,Graduates included in outcomes calculation,
+grads_matched,Matched Graduates,

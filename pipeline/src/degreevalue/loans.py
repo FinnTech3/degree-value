@@ -54,6 +54,7 @@ to nominal balance at the start of repayment and adding 2% CPI a year after.
 from __future__ import annotations
 
 import csv
+import functools
 import math
 import os
 import random
@@ -78,6 +79,7 @@ def _csv(name: str) -> list[dict]:
         return list(csv.DictReader(f))
 
 
+@functools.lru_cache(maxsize=None)
 def pay_index(real_growth: float = 0.0) -> dict[int, float]:
     """Average weekly earnings by tax year (the year it starts), with 2022 = 1.
 
@@ -113,12 +115,14 @@ def pay_index(real_growth: float = 0.0) -> dict[int, float]:
     return index
 
 
+@functools.lru_cache(maxsize=None)
 def rpi_path() -> dict[int, float]:
     rpi = {int(r["year"]): float(r["rpi_pct"]) / 100 for r in _csv("macro_assumptions.csv")}
     last = max(rpi)
     return {y: rpi.get(y, rpi[last]) for y in range(2027, FIRST_YEAR + TERM_YEARS + 1)}
 
 
+@functools.lru_cache(maxsize=None)
 def thresholds() -> dict[int, int]:
     """Plan 5 repayment threshold by tax year, in pounds."""
     published = {int(r["time_period"][:4]): int(r["repayment_threshold"])
@@ -130,12 +134,13 @@ def thresholds() -> dict[int, int]:
     return out
 
 
+@functools.lru_cache(maxsize=None)
 def age_profile() -> dict[str, list[tuple[float, float]]]:
     """(age, log median annual pay) at each ASHE age band's midpoint, by sex."""
     sheets = read_xlsx(os.path.join(SOURCES, "ashe_table_6_7a_annual_pay_gross_2025_provisional.xlsx"))
     mids = {"22-29": 25.5, "30-39": 34.5, "40-49": 44.5, "50-59": 54.5, "60+": 64.5}
     out = {}
-    for sheet, sex in (("Male", "Male"), ("Female", "Female")):
+    for sheet, sex in (("All", "Total"), ("Male", "Male"), ("Female", "Female")):
         pts = []
         for row in sheets[sheet]:
             label = row[0].strip() if row else ""
@@ -157,6 +162,7 @@ def age_factor(profile: list[tuple[float, float]], age: float) -> float:
     return math.exp(log_at(age) - log_at(LAST_LEO_AGE))
 
 
+@functools.lru_cache(maxsize=None)
 def dfe_targets() -> dict:
     rows = _csv("slf_2024_25_long_9.csv")
     by_decile = {int(r["lifetime_earning_decile"]): {
@@ -194,14 +200,19 @@ class Profile:
     points: dict[int, tuple[float, float]]   # years out -> (log median, log sd)
 
 
-def profiles(paths: list[PathPoint]) -> list[Profile]:
-    """One earnings profile per subject and sex that has all four years published."""
+def profiles(paths: list[PathPoint], include_total: bool = False) -> list[Profile]:
+    """One earnings profile per subject and sex that has all four years published.
+
+    The simulation runs women and men separately and weights them, so the
+    all-graduates profile of each subject is left out unless asked for; the
+    app uses it for a reader who does not say.
+    """
     groups: dict[tuple[str, str], dict[int, PathPoint]] = {}
     for p in paths:
         groups.setdefault((p.subject, p.sex), {})[p.years_after] = p
     out = []
     for (subject, sex), pts in groups.items():
-        if subject == "Total" or sex == "Total" or set(pts) != {1, 3, 5, 10}:
+        if subject == "Total" or (sex == "Total" and not include_total) or set(pts) != {1, 3, 5, 10}:
             continue
         points = {}
         for y, p in pts.items():
@@ -253,13 +264,21 @@ def inverse_normal(p: float) -> float:
 def earnings_path(profile: Profile, ages: list[tuple[float, float]], phi: float,
                   pay: dict[int, float], rng: random.Random) -> list[int]:
     """Nominal earnings in pence for each of the 40 repayment years."""
-    out = []
+    zs = []
     z = rng.gauss(0.0, 1.0)
     shock = math.sqrt(max(0.0, 1 - phi * phi))
     for k in range(1, TERM_YEARS + 1):
         if k > 1:
             z = phi * z + shock * rng.gauss(0.0, 1.0)
-        u = 0.5 * math.erfc(-z / math.sqrt(2))
+        zs.append(z)
+    return earnings_for(profile, ages, [0.5 * math.erfc(-z / math.sqrt(2)) for z in zs], pay)
+
+
+def earnings_for(profile: Profile, ages: list[tuple[float, float]], ranks: list[float],
+                 pay: dict[int, float]) -> list[int]:
+    """Nominal earnings in pence, given the graduate's rank (0 to 1) in each year."""
+    out = []
+    for k, u in enumerate(ranks, 1):
         if u <= profile.not_working:
             out.append(0)
             continue
@@ -339,6 +358,19 @@ def simulate(profs: list[Profile], real_growth: float, balance_pounds: float, ph
             out.append(Graduate(prof.subject, prof.sex, w,
                                 repay(balance, path, rpi, thr, first_deflator=first_deflator)))
     return out
+
+
+def at_rank(profile: Profile, place: float, real_growth: float, balance_pounds: float) -> Outcome:
+    """The loan of a graduate who stays at one place among their subject's
+    graduates in work for life: `place` 0.5 is the median earner in work.
+
+    With ranks fixed, as in the central run, this is exact rather than a
+    simulation, which is what lets the app show every place on a slider.
+    """
+    u = profile.not_working + place * (1 - profile.not_working)
+    earnings = earnings_for(profile, age_profile()[profile.sex], [u] * TERM_YEARS, pay_index(real_growth))
+    return repay(round(balance_pounds * 100), earnings, rpi_path(), thresholds(),
+                 first_deflator=dfe_targets()["deflator_at_start"])
 
 
 def summarise(grads: list[Graduate], balance_pounds: float) -> dict:
