@@ -145,6 +145,7 @@ def run() -> dict:
         "written_off_share": sum(by_subject[s]["graduates"] for s in written_off) / all_grads,
         "places": places,
         "paths": sp,
+        "all_paths": paths,
         "rank_correlation": spearman(y1, y10),
         "rank_year1": r1,
         "rank_year10": r10,
