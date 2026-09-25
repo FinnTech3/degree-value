@@ -390,13 +390,13 @@ def clearing_share(profile: Profile, real_growth: float, balance_pounds: float, 
 
 
 def summarise(grads: list[Graduate], balance_pounds: float) -> dict:
-    total = sum(g.weight for g in grads)
+    total = math.fsum(g.weight for g in grads)
     full = sum(g.weight for g in grads if g.outcome.repaid_in_full) / total
     ordered = sorted(grads, key=lambda g: g.outcome.lifetime_earnings_real)
     deciles: list[list[Graduate]] = [[] for _ in range(10)]
     acc = 0.0
     for g in ordered:
-        deciles[min(9, int(10 * acc / total))].append(g)
+        deciles[min(9, int(10 * acc / total + TIE))].append(g)
         acc += g.weight
     by = {}
     # the balance at the start of repayment in 2024-25 prices, at the DfE's own price level
@@ -416,13 +416,22 @@ def summarise(grads: list[Graduate], balance_pounds: float) -> dict:
             "repayments_real": repaid_real, "by_decile": by}
 
 
+# Running totals of weights pick out medians and deciles. When the weights are
+# equal, the total can fall exactly on the halfway mark, and whether the
+# running sum reaches it would then depend on rounding in the last digit,
+# which differs between Python versions. Totals are summed exactly and a
+# running sum within this share of a boundary counts as on it.
+TIE = 1e-9
+
+
 def weighted_median(values: list[float], weights: list[float]) -> float:
+    """The lower of the two middle values on a tie."""
     pairs = sorted(zip(values, weights))
-    half = sum(weights) / 2
+    half = math.fsum(weights) / 2
     acc = 0.0
     for v, w in pairs:
         acc += w
-        if acc >= half:
+        if acc >= half * (1 - TIE):
             return v
     return pairs[-1][0]
 

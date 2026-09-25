@@ -30,8 +30,8 @@
 <text x="691.8" y="199.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#111110" text-anchor="start">19</text>
 <text x="382.0" y="220.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" fill="#52514e" text-anchor="end">Physics and astronomy</text>
 <path d="M394.0,210.0 H693.0 Q697.0,210.0 697.0,214.0 V219.0 Q697.0,223.0 693.0,223.0 H394.0 Z" fill="#cfccc3"/>
-<line x1="712.2" y1="207.0" x2="712.2" y2="226.0" stroke="#111110" stroke-width="2"/>
-<text x="722.2" y="221.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#111110" text-anchor="start">20</text>
+<line x1="697.0" y1="207.0" x2="697.0" y2="226.0" stroke="#111110" stroke-width="2"/>
+<text x="707.0" y="221.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#111110" text-anchor="start">20</text>
 <text x="382.0" y="242.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" fill="#52514e" text-anchor="end">Medical sciences</text>
 <path d="M394.0,232.0 H723.3 Q727.3,232.0 727.3,236.0 V241.0 Q727.3,245.0 723.3,245.0 H394.0 Z" fill="#cfccc3"/>
 <line x1="742.5" y1="229.0" x2="742.5" y2="248.0" stroke="#111110" stroke-width="2"/>

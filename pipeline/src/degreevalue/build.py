@@ -62,7 +62,7 @@ def payload() -> dict:
             "name": name,
             "graduates": round(a["graduates"]),
             "full": a["full"], "years": a["median_years"], "repaid": round(a["median_repaid_real"]),
-            "full_moving": b["full"], "years_moving": b["median_years"],
+            "full_moving": round(b["full"], 10), "years_moving": b["median_years"],
             "rank1": r["rank_year1"].get(name), "rank10": r["rank_year10"].get(name),
             "paths": paths, "places": places, "not_working": not_working, "universities": unis,
         })
@@ -74,7 +74,10 @@ def payload() -> dict:
         "term": loans.TERM_YEARS,
         "balance": t["balance_nominal"],
         "growth": r["growth"],
-        "model": {k: s[k] for k in ("full_repayment_share", "median_years", "repayments_real", "share_repaid_real")},
+        # rounded well below their precision: Python 3.12's sum() compensates
+        # for rounding and 3.11's does not, and the file must build the same on both
+        "model": {k: round(s[k], 10)
+                  for k in ("full_repayment_share", "median_years", "repayments_real", "share_repaid_real")},
         "dfe": {k: t[k] for k in ("full_repayment_share", "median_years", "repayments_real", "share_repaid_real")},
         "written_off": r["written_off"],
         "written_off_share": r["written_off_share"],
