@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 560" width="1120" height="560" role="img" aria-label="My loan model against the DfE's own forecast">
+<rect width="1120" height="560" fill="#fbfaf7"/>
+<text x="64.0" y="44.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="21" font-weight="600" fill="#111110" text-anchor="start">My loan model against the DfE's own forecast</text>
+<text x="64.0" y="70.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" fill="#52514e" text-anchor="start">Each tenth of Plan 5 borrowers by lifetime earnings. The model was tuned only to the share repaying in full, so every point here is out of sample</text>
+<text x="64.0" y="114.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#111110" text-anchor="start">Years repaying</text>
+<line x1="64.0" y1="440.0" x2="552.0" y2="440.0" stroke="#e6e4dc" stroke-width="1.0"/>
+<text x="56.0" y="444.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="end">0</text>
+<line x1="64.0" y1="290.0" x2="552.0" y2="290.0" stroke="#e6e4dc" stroke-width="1.0"/>
+<text x="56.0" y="294.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="end">20</text>
+<line x1="64.0" y1="140.0" x2="552.0" y2="140.0" stroke="#e6e4dc" stroke-width="1.0"/>
+<text x="56.0" y="144.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="end">40</text>
+<polyline points="84.0,140.0 133.8,140.0 183.6,140.0 233.3,140.0 283.1,143.8 332.9,192.5 382.7,237.5 432.4,267.5 482.2,301.2 532.0,342.5" fill="none" stroke="#52514e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="84.0,140.0 133.8,140.0 183.6,140.0 233.3,140.0 283.1,147.5 332.9,237.5 382.7,282.5 432.4,312.5 482.2,335.0 532.0,365.0" fill="none" stroke="#2a78d6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="84.0" cy="140.0" r="5.5" fill="#fbfaf7"/>
+<circle cx="84.0" cy="140.0" r="3.5" fill="#52514e"/>
+<circle cx="84.0" cy="140.0" r="6.0" fill="#fbfaf7"/>
+<circle cx="84.0" cy="140.0" r="4.0" fill="#2a78d6"/>
+<circle cx="133.8" cy="140.0" r="5.5" fill="#fbfaf7"/>
+<circle cx="133.8" cy="140.0" r="3.5" fill="#52514e"/>
+<circle cx="133.8" cy="140.0" r="6.0" fill="#fbfaf7"/>
+<circle cx="133.8" cy="140.0" r="4.0" fill="#2a78d6"/>
+<circle cx="183.6" cy="140.0" r="5.5" fill="#fbfaf7"/>
+<circle cx="183.6" cy="140.0" r="3.5" fill="#52514e"/>
+<circle cx="183.6" cy="140.0" r="6.0" fill="#fbfaf7"/>
+<circle cx="183.6" cy="140.0" r="4.0" fill="#2a78d6"/>
+<circle cx="233.3" cy="140.0" r="5.5" fill="#fbfaf7"/>
+<circle cx="233.3" cy="140.0" r="3.5" fill="#52514e"/>
+<circle cx="233.3" cy="140.0" r="6.0" fill="#fbfaf7"/>
+<circle cx="233.3" cy="140.0" r="4.0" fill="#2a78d6"/>
+<circle cx="283.1" cy="143.8" r="5.5" fill="#fbfaf7"/>
+<circle cx="283.1" cy="143.8" r="3.5" fill="#52514e"/>
+<circle cx="283.1" cy="147.5" r="6.0" fill="#fbfaf7"/>
+<circle cx="283.1" cy="147.5" r="4.0" fill="#2a78d6"/>
+<circle cx="332.9" cy="192.5" r="5.5" fill="#fbfaf7"/>
+<circle cx="332.9" cy="192.5" r="3.5" fill="#52514e"/>
+<circle cx="332.9" cy="237.5" r="6.0" fill="#fbfaf7"/>
+<circle cx="332.9" cy="237.5" r="4.0" fill="#2a78d6"/>
+<circle cx="382.7" cy="237.5" r="5.5" fill="#fbfaf7"/>
+<circle cx="382.7" cy="237.5" r="3.5" fill="#52514e"/>
+<circle cx="382.7" cy="282.5" r="6.0" fill="#fbfaf7"/>
+<circle cx="382.7" cy="282.5" r="4.0" fill="#2a78d6"/>
+<circle cx="432.4" cy="267.5" r="5.5" fill="#fbfaf7"/>
+<circle cx="432.4" cy="267.5" r="3.5" fill="#52514e"/>
+<circle cx="432.4" cy="312.5" r="6.0" fill="#fbfaf7"/>
+<circle cx="432.4" cy="312.5" r="4.0" fill="#2a78d6"/>
+<circle cx="482.2" cy="301.2" r="5.5" fill="#fbfaf7"/>
+<circle cx="482.2" cy="301.2" r="3.5" fill="#52514e"/>
+<circle cx="482.2" cy="335.0" r="6.0" fill="#fbfaf7"/>
+<circle cx="482.2" cy="335.0" r="4.0" fill="#2a78d6"/>
+<circle cx="532.0" cy="342.5" r="5.5" fill="#fbfaf7"/>
+<circle cx="532.0" cy="342.5" r="3.5" fill="#52514e"/>
+<circle cx="532.0" cy="365.0" r="6.0" fill="#fbfaf7"/>
+<circle cx="532.0" cy="365.0" r="4.0" fill="#2a78d6"/>
+<text x="84.0" y="464.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="start">lowest earners</text>
+<text x="532.0" y="464.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="end">highest</text>
+<text x="612.0" y="114.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#111110" text-anchor="start">Repaid over the term, 2024-25 prices</text>
+<line x1="612.0" y1="440.0" x2="1100.0" y2="440.0" stroke="#e6e4dc" stroke-width="1.0"/>
+<text x="604.0" y="444.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="end">£0</text>
+<line x1="612.0" y1="290.0" x2="1100.0" y2="290.0" stroke="#e6e4dc" stroke-width="1.0"/>
+<text x="604.0" y="294.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="end">£22k</text>
+<line x1="612.0" y1="140.0" x2="1100.0" y2="140.0" stroke="#e6e4dc" stroke-width="1.0"/>
+<text x="604.0" y="144.0" font-family="'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="end">£45k</text>
+<polyline points="632.0,414.0 681.8,380.7 731.6,344.7 781.3,296.0 831.1,253.3 880.9,210.7 930.7,186.7 980.4,173.3 1030.2,164.7 1080.0,158.7" fill="none" stroke="#52514e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="632.0,440.0 681.8,440.0 731.6,406.2 781.3,283.9 831.1,171.3 880.9,157.5 930.7,157.6 980.4,157.6 1030.2,157.6 1080.0,157.7" fill="none" stroke="#2a78d6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="632.0" cy="414.0" r="5.5" fill="#fbfaf7"/>
+<circle cx="632.0" cy="414.0" r="3.5" fill="#52514e"/>
+<circle cx="632.0" cy="440.0" r="6.0" fill="#fbfaf7"/>
+<circle cx="632.0" cy="440.0" r="4.0" fill="#2a78d6"/>
+<circle cx="681.8" cy="380.7" r="5.5" fill="#fbfaf7"/>
+<circle cx="681.8" cy="380.7" r="3.5" fill="#52514e"/>
+<circle cx="681.8" cy="440.0" r="6.0" fill="#fbfaf7"/>
+<circle cx="681.8" cy="440.0" r="4.0" fill="#2a78d6"/>
+<circle cx="731.6" cy="344.7" r="5.5" fill="#fbfaf7"/>
+<circle cx="731.6" cy="344.7" r="3.5" fill="#52514e"/>
+<circle cx="731.6" cy="406.2" r="6.0" fill="#fbfaf7"/>
+<circle cx="731.6" cy="406.2" r="4.0" fill="#2a78d6"/>
+<circle cx="781.3" cy="296.0" r="5.5" fill="#fbfaf7"/>
+<circle cx="781.3" cy="296.0" r="3.5" fill="#52514e"/>
+<circle cx="781.3" cy="283.9" r="6.0" fill="#fbfaf7"/>
+<circle cx="781.3" cy="283.9" r="4.0" fill="#2a78d6"/>
+<circle cx="831.1" cy="253.3" r="5.5" fill="#fbfaf7"/>
+<circle cx="831.1" cy="253.3" r="3.5" fill="#52514e"/>
+<circle cx="831.1" cy="171.3" r="6.0" fill="#fbfaf7"/>
+<circle cx="831.1" cy="171.3" r="4.0" fill="#2a78d6"/>
+<circle cx="880.9" cy="210.7" r="5.5" fill="#fbfaf7"/>
+<circle cx="880.9" cy="210.7" r="3.5" fill="#52514e"/>
+<circle cx="880.9" cy="157.5" r="6.0" fill="#fbfaf7"/>
+<circle cx="880.9" cy="157.5" r="4.0" fill="#2a78d6"/>
+<circle cx="930.7" cy="186.7" r="5.5" fill="#fbfaf7"/>
+<circle cx="930.7" cy="186.7" r="3.5" fill="#52514e"/>
+<circle cx="930.7" cy="157.6" r="6.0" fill="#fbfaf7"/>
+<circle cx="930.7" cy="157.6" r="4.0" fill="#2a78d6"/>
+<circle cx="980.4" cy="173.3" r="5.5" fill="#fbfaf7"/>
+<circle cx="980.4" cy="173.3" r="3.5" fill="#52514e"/>
+<circle cx="980.4" cy="157.6" r="6.0" fill="#fbfaf7"/>
+<circle cx="980.4" cy="157.6" r="4.0" fill="#2a78d6"/>
+<circle cx="1030.2" cy="164.7" r="5.5" fill="#fbfaf7"/>
+<circle cx="1030.2" cy="164.7" r="3.5" fill="#52514e"/>
+<circle cx="1030.2" cy="157.6" r="6.0" fill="#fbfaf7"/>
+<circle cx="1030.2" cy="157.6" r="4.0" fill="#2a78d6"/>
+<circle cx="1080.0" cy="158.7" r="5.5" fill="#fbfaf7"/>
+<circle cx="1080.0" cy="158.7" r="3.5" fill="#52514e"/>
+<circle cx="1080.0" cy="157.7" r="6.0" fill="#fbfaf7"/>
+<circle cx="1080.0" cy="157.7" r="4.0" fill="#2a78d6"/>
+<text x="632.0" y="464.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="start">lowest earners</text>
+<text x="1080.0" y="464.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="end">highest</text>
+<text x="64.0" y="500.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#111110" text-anchor="start">Blue: my model. Grey: the DfE forecast.</text>
+<text x="64.0" y="536.0" font-family="'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#6b6a65" text-anchor="start">Both have the bottom half repaying for forty years. Because ranks are fixed for life, my top half finishes 3 to 6 years sooner and my bottom fifth repays almost nothing.</text>
+</svg>
