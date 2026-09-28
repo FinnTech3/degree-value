@@ -104,6 +104,7 @@ def loan_by_subject_exact(profs: dict[str, loans.Profile], growth: float, balanc
             "graduates": p.graduates,
             "full": loans.clearing_share(p, growth, balance),
             "median_years": mid.years,
+            "median_cleared": mid.repaid_in_full,
             "median_repaid_real": mid.repaid_real / 100,
         }
     return out
@@ -137,7 +138,9 @@ def run() -> dict:
     by_subject_moving = loan_by_subject(loans.simulate(list(everyone.values()), growth_moving,
                                                        t["balance_nominal"], phi=PHI_RANGE))
 
-    written_off = [s for s, v in by_subject.items() if v["median_years"] >= loans.TERM_YEARS]
+    # Not "40 years": a graduate who clears the loan in its final year also
+    # repays for 40 years, and has not been written off.
+    written_off = [s for s, v in by_subject.items() if not v["median_cleared"]]
     all_grads = sum(v["graduates"] for v in by_subject.values())
 
     # every place on the app's slider: exact at fixed ranks

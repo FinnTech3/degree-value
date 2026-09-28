@@ -15,8 +15,8 @@ describe("the data", () => {
   });
 
   it("says what the README says", () => {
-    expect(d.written_off).toHaveLength(10);
-    expect(Math.round(d.written_off_share * 100)).toBe(34);
+    expect(d.written_off).toHaveLength(9);
+    expect(Math.round(d.written_off_share * 100)).toBe(30);
     expect(bySubject("Economics").years).toBe(15);
     expect(bySubject("Medicine and dentistry").years).toBe(14);
     expect(bySubject("Performing arts").years).toBe(40);

@@ -14,8 +14,8 @@ working. So I built the one I actually wanted, then made it show its working.
 
 ## The finding
 
-**In 10 of 34 subjects, the typical graduate is still repaying when the loan is
-written off at 61.** Those subjects hold 34% of graduates. For their median
+**In 9 of 34 subjects, the typical graduate is still repaying when the loan is
+written off at 61.** Those subjects hold 30% of graduates. For their median
 graduate, Plan 5 is not a loan that gets paid off. It is 9% of everything they
 earn above the threshold, every year, for forty years.
 
@@ -24,7 +24,7 @@ median economics graduate in 15, at 36.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/years-by-subject-dark.svg">
-  <img alt="Years the median graduate repays a Plan 5 loan, by subject, from 14 for medicine and dentistry and 15 for economics up to 40, written off, for ten subjects including English studies, psychology, education and teaching, performing arts and creative arts and design." src="docs/figures/years-by-subject-light.svg">
+  <img alt="Years the median graduate repays a Plan 5 loan, by subject, from 14 for medicine and dentistry and 15 for economics up to 40 for ten subjects. In nine of them, including psychology, education and teaching, performing arts and creative arts and design, the loan is still owed at 61 and written off; English studies clears it in the fortieth year." src="docs/figures/years-by-subject-light.svg">
 </picture>
 
 | Subject | Clear it in full | Median graduate's years | Median graduate repays, 2024-25 prices |
@@ -190,6 +190,12 @@ Every source, address and checksum is in [docs/SOURCES.md](docs/SOURCES.md).
   economics graduate beside a table saying 15. Both now come from the
   all-graduates earnings, exactly. That moved the count of subjects whose
   median graduate is written off from 12 to 10.
+- **I counted a loan cleared in its last year as written off.** The list of
+  written-off subjects was every subject whose median graduate repays for 40
+  years. The median English studies graduate does repay for 40 years, but
+  clears the loan in the fortieth, so it is not written off. I found it when
+  drawing each subject's balance year by year for the page. The count is 9,
+  holding 30% of graduates, not 10 and 34%.
 - **I miscounted my own check.** The range check's summary counted matching
   ranges twice, so the default percentile appeared to reproduce 4 of the 8
   numbers. It reproduces 6. The pass rule was never affected.

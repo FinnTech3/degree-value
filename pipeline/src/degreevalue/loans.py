@@ -305,12 +305,14 @@ class Outcome:
 
 
 def repay(balance_pence: int, earnings: list[int], rpi: dict[int, float], threshold: dict[int, int],
-          cpi: float = 0.02, first_deflator: float = 1.0) -> Outcome:
+          cpi: float = 0.02, first_deflator: float = 1.0, trace: list[int] | None = None) -> Outcome:
     """Run one loan through its term: interest added, then 9% above the threshold
     collected, each year, until it is cleared or written off.
 
     Real values are in 2024-25 prices. `first_deflator` is the price level of
     the first repayment year relative to 2024-25; each later year adds `cpi`.
+    If `trace` is given, the balance left at the end of each year, in real
+    pence, is appended to it.
     """
     balance = balance_pence
     paid = paid_real = earned_real = 0
@@ -325,6 +327,8 @@ def repay(balance_pence: int, earnings: list[int], rpi: dict[int, float], thresh
         balance -= payment
         paid += payment
         paid_real += round(payment / deflator)
+        if trace is not None:
+            trace.append(round(balance / deflator))
         if balance == 0:
             for rest in earnings[k + 1:]:
                 deflator *= (1 + cpi)
@@ -371,6 +375,17 @@ def at_rank(profile: Profile, place: float, real_growth: float, balance_pounds: 
     earnings = earnings_for(profile, age_profile()[profile.sex], [place] * TERM_YEARS, pay_index(real_growth))
     return repay(round(balance_pounds * 100), earnings, rpi_path(), thresholds(),
                  first_deflator=dfe_targets()["deflator_at_start"])
+
+
+def balance_path(profile: Profile, place: float, real_growth: float, balance_pounds: float) -> list[int]:
+    """What the graduate at `place` still owes at the end of each year, in
+    pounds at 2024-25 prices, until the loan is cleared or written off. The
+    same run as at_rank, with the balance written down as it goes."""
+    earnings = earnings_for(profile, age_profile()[profile.sex], [place] * TERM_YEARS, pay_index(real_growth))
+    trace: list[int] = []
+    repay(round(balance_pounds * 100), earnings, rpi_path(), thresholds(),
+          first_deflator=dfe_targets()["deflator_at_start"], trace=trace)
+    return [round(p / 100) for p in trace]
 
 
 def clearing_share(profile: Profile, real_growth: float, balance_pounds: float, steps: int = 30) -> float:

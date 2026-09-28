@@ -110,8 +110,8 @@ def fig_years_by_subject(r, p):
     h = top + row * len(order) + 90
     n = len(r["written_off"])
     s = Svg(h, p, f"In {n} of {len(order)} subjects, the typical graduate is still repaying at 61",
-            "Years the median graduate repays a Plan 5 loan, students starting in 2024. Forty means the loan "
-            "is written off unpaid")
+            "Years the median graduate repays a Plan 5 loan, students starting in 2024. Blue means it is still "
+            "owed at 61 and written off")
     label_w = 330
     x0 = LEFT + label_w
     span = W - x0 - 120
@@ -122,7 +122,7 @@ def fig_years_by_subject(r, p):
     for i, subj in enumerate(order):
         y = top + i * row
         yrs = bs[subj]["median_years"]
-        off = yrs >= 40
+        off = subj in r["written_off"]
         s.text(x0 - 12, y + 14, subj, 13, "ink" if off else "dim", SANS, "end")
         s.bar(x0, y + 4, yrs / 40 * span, 13, "blue" if off else "rest")
         alt = bm[subj]["median_years"]

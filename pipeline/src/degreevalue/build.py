@@ -10,6 +10,9 @@ One file, data/built/degree.json, copied into the app at build time:
     every place from the 5th to the 95th among its graduates in work;
   - for each subject, every university's median pay one, three and five
     years out, where the DfE publishes it;
+  - for each subject, its thread: what the median graduate still owes at
+    the end of each year, in pounds at 2024-25 prices, to the nearest £10,
+    until the loan is cleared or written off. The app draws these;
   - the checks, the calibration and the model's comparison with the DfE.
 
 Refuses to write anything if a verification check fails.
@@ -31,6 +34,7 @@ SEXES = ("Total", "Female", "Male")
 
 def payload() -> dict:
     r = run()
+    t = r["targets"]
     subjects = []
     providers: list[list] = []
     provider_index: dict[str, int] = {}
@@ -58,21 +62,25 @@ def payload() -> dict:
             ys = d["years"]
             unis.append([provider_index[key]] + [ys.get(y, {}).get("median") for y in (1, 3, 5)]
                         + [ys.get(5, {}).get("in_earnings")])
+        thread = loans.balance_path(r["profiles"][(name, "Total")], 0.5, r["growth"], t["balance_nominal"])
         subjects.append({
             "name": name,
+            "thread": [round(b, -1) for b in thread],
             "graduates": round(a["graduates"]),
-            "full": a["full"], "years": a["median_years"], "repaid": round(a["median_repaid_real"]),
+            "full": a["full"], "years": a["median_years"], "cleared": a["median_cleared"],
+            "repaid": round(a["median_repaid_real"]),
             "full_moving": round(b["full"], 10), "years_moving": b["median_years"],
             "rank1": r["rank_year1"].get(name), "rank10": r["rank_year10"].get(name),
             "paths": paths, "places": places, "not_working": not_working, "universities": unis,
         })
-    t, s = r["targets"], r["summary"]
+    s = r["summary"]
     return {
         "places": PLACES,
         "first_year": loans.FIRST_YEAR,
         "graduation_age": loans.GRADUATION_AGE,
         "term": loans.TERM_YEARS,
         "balance": t["balance_nominal"],
+        "balance_real": round(t["balance_nominal"] / loans.dfe_targets()["deflator_at_start"]),
         "growth": r["growth"],
         # rounded well below their precision: Python 3.12's sum() compensates
         # for rounding and 3.11's does not, and the file must build the same on both
