@@ -182,9 +182,8 @@ export function App() {
         {d && subject && (
           <aside className="signoff">
             <p>
-              I'm a student myself, working out this exact loan right now, and I built this because every calculator I
-              found skipped the interest or assumed nobody would check its working. If it answered your question, I've
-              got more like it at <a href={PORTFOLIO}>finn-lakin-portfolio.netlify.app</a>.
+              That's your number, worked out the way I wished a calculator had done it for me. More like it at{" "}
+              <a href={PORTFOLIO}>finn-lakin-portfolio.netlify.app</a>.
             </p>
           </aside>
         )}
