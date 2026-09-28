@@ -7,6 +7,11 @@ own published figures and its own forecast of Plan 5 repayments.
 
 **Pick your subject:** [finntech3.github.io/degree-value](https://finntech3.github.io/degree-value/)
 
+**Why I built this.** I'm a student, currently somewhere inside this exact
+maze of thresholds and RPI and forty-year write-offs, and every calculator I
+found online either skipped the interest or assumed nobody would check its
+working. So I built the one I actually wanted, then made it show its working.
+
 ## The finding
 
 **In 10 of 34 subjects, the typical graduate is still repaying when the loan is
@@ -41,11 +46,15 @@ almost the same amount in today's money. The creative arts graduate pays about
 half as much, over more than twice as long.
 
 **What I think this means.** "Will I pay it off?" is the wrong question for most
-students, and the amount borrowed matters much less than it looks. For the best
-paid, Plan 5 is a loan with interest at RPI, cleared in their thirties. For a
-third of graduates it is a tax on earnings above the threshold, and for them the
-headline debt is almost irrelevant: an extra year of maintenance loan changes
-the balance written off, not what they pay each month.
+students, and the amount borrowed matters much less than it looks, which is
+not the sentence a loan company wants printed on its own statement. For the
+best paid, Plan 5 is a loan with interest at RPI, cleared in their thirties.
+For a third of graduates it is a tax on earnings above the threshold, and for
+them the headline debt is almost irrelevant: an extra year of maintenance
+loan changes the balance written off, not what they pay each month. Treating
+£47,900 as a debt to be afraid of, when for a third of graduates it behaves
+nothing like one, is how a lot of people end up making worse decisions than
+the number in front of them deserves.
 
 **Starting pay is a poor guide to any of this.** Nursing graduates out-earn
 economists a year after graduating, £31,400 against £29,600. Ten years out the

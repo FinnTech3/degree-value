@@ -21,6 +21,7 @@ import { UniChart } from "./UniChart";
 import { useCountUp } from "./hooks";
 
 const REPO = "https://github.com/FinnTech3/degree-value";
+const PORTFOLIO = "https://finn-lakin-portfolio.netlify.app/";
 const GROUPS: [Sex, string][] = [
   ["Total", "All"],
   ["Female", "Women"],
@@ -177,6 +178,16 @@ export function App() {
         </div>
 
         {d && subject && <Sections d={d} s={subject} sex={sex} place={place} uni={uni} setUni={setUni} />}
+
+        {d && subject && (
+          <aside className="signoff">
+            <p>
+              I'm a student myself, working out this exact loan right now, and I built this because every calculator I
+              found skipped the interest or assumed nobody would check its working. If it answered your question, I've
+              got more like it at <a href={PORTFOLIO}>finn-lakin-portfolio.netlify.app</a>.
+            </p>
+          </aside>
+        )}
       </main>
 
       <footer>
