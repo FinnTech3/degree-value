@@ -11,9 +11,13 @@ export interface Places {
 
 export interface Subject {
   name: string;
+  /** What the median graduate still owes at the end of each year, £ at 2024-25 prices, until cleared or written off. */
+  thread: number[];
   graduates: number;
   full: number;
   years: number;
+  /** Whether the median graduate clears the loan before it is written off. */
+  cleared: boolean;
   repaid: number;
   full_moving: number;
   years_moving: number;
@@ -33,6 +37,8 @@ export interface DegreeFile {
   graduation_age: number;
   term: number;
   balance: number;
+  /** The balance when repayments begin, at 2024-25 prices. */
+  balance_real: number;
   growth: number;
   model: Summary;
   dfe: Summary;

@@ -83,7 +83,7 @@ export function ShareCard({ content, file }: Props) {
       <canvas
         ref={canvas}
         role="img"
-        aria-label={`Your result as a picture: ${content.big} ${content.unit}, ${content.subject}. ${content.lines.join(" ")}`}
+        aria-label={`Your result as a picture: ${content.years} years, ${content.cleared ? `cleared at ${content.age}` : `written off at ${content.age}`}, ${content.subject}. ${content.lines.join(" ")}`}
       />
       <div>
         <p className="sub">

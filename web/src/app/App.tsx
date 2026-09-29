@@ -13,15 +13,18 @@ import {
 } from "../lib/degree";
 import { gbp } from "../lib/format";
 import { readChoice, writeChoice } from "../lib/url";
+import { FoilNote } from "./FoilNote";
+import { Loom } from "./Loom";
 import { PayChart } from "./PayChart";
 import { PlaceChart } from "./PlaceChart";
 import { ShareCard } from "./ShareCard";
-import { SubjectsChart } from "./SubjectsChart";
 import { UniChart } from "./UniChart";
 import { useCountUp } from "./hooks";
+import { Monogram } from "./series/Monogram";
+import { SeriesStrip } from "./series/SeriesStrip";
+import { PORTFOLIO } from "./series/series";
 
 const REPO = "https://github.com/FinnTech3/degree-value";
-const PORTFOLIO = "https://finn-lakin-portfolio.netlify.app/";
 const GROUPS: [Sex, string][] = [
   ["Total", "All"],
   ["Female", "Women"],
@@ -86,18 +89,26 @@ export function App() {
 
   const sorted = useMemo(() => (d ? [...d.subjects].sort((a, b) => a.name.localeCompare(b.name, "en-GB")) : []), [d]);
 
+  const you = useMemo(() => {
+    if (!d || !subject) return null;
+    const o = outcome(d, subject, sex, place);
+    if (!o || (o.years === subject.years && o.cleared === subject.cleared)) return null;
+    return {
+      age: o.age,
+      cleared: o.cleared,
+      label: o.cleared ? `you clear it at ${o.age}` : `you: still owed at ${d.graduation_age + d.term}`,
+    };
+  }, [d, subject, sex, place]);
+
   return (
     <div className="wrap">
-      <header>
-        <div className="mark">
-          <span className="ladder" aria-hidden="true">
-            {Array.from({ length: 8 }, (_, i) => (
-              <i key={i} className={i === 7 ? "d" : undefined} style={{ height: 16 }} />
-            ))}
-          </span>
-          <b>Degree value</b>
-          <small>what a student loan costs, by subject</small>
-        </div>
+      <header className="bar">
+        <Monogram />
+        <p className="series">
+          A series of six by <b>Finn Lakin</b>
+          <br />
+          No. 2 · Student loans
+        </p>
         <button
           className="toggle"
           type="button"
@@ -109,84 +120,114 @@ export function App() {
       </header>
 
       <main>
-        <div className="hero">
-          <h1>When will you pay off your student loan?</h1>
-          <p className="lede">
-            Plan 5 loans, for students in England starting from 2024. The answer comes from what each subject's
-            graduates actually earn.
-          </p>
-          <div className="controls">
-            <div className="field">
-              <label htmlFor="subject">Subject</label>
-              <select
-                id="subject"
-                value={subject ? slug(subject.name) : ""}
-                disabled={!d}
-                onChange={(e) => {
-                  setSubjectSlug(e.target.value);
+        <div className="stage">
+          <div className="head">
+            <h1>
+              Some loans run <em>forty years.</em>
+            </h1>
+            <p className="dek">
+              Each thread is a subject: what its typical graduate still owes on a Plan 5 loan, from 21 to 61. It knots
+              where the loan is cleared, and frays off the edge where it is written off instead.
+            </p>
+          </div>
+
+          <FoilNote>
+            I'm a student, somewhere inside this exact maze of thresholds, interest and forty-year write-offs. Every
+            calculator I found skipped the interest or hid its working, so I built the one I wanted. Pick your subject
+            and see yours.
+          </FoilNote>
+
+          <figure className="loom-fig">
+            {d && subject ? (
+              <Loom
+                d={d}
+                current={subject.name}
+                you={you}
+                onPick={(name) => {
+                  setSubjectSlug(slug(name));
                   setUni(null);
                 }}
-              >
-                {!d && <option value="">Loading subjects</option>}
-                {sorted.map((s) => (
-                  <option key={s.name} value={slug(s.name)}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="field inline">
-              <span id="group-label">Graduates</span>
-              <div className="segmented" role="group" aria-labelledby="group-label">
-                {GROUPS.map(([k, label]) => (
-                  <button key={k} type="button" aria-pressed={sex === k} onClick={() => setSex(k)}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="field slider">
-              <label htmlFor="place">
-                Where you land among {subject ? subject.name : "your subject's"} {WHO[sex]}:{" "}
-                <output htmlFor="place">{place === 50 ? "the middle" : `${ordinal(place)} of 100`}</output>
-              </label>
-              <input
-                id="place"
-                type="range"
-                min={PLACE_MIN}
-                max={PLACE_MAX}
-                step={1}
-                value={place}
-                onChange={(e) => setPlace(Number(e.target.value))}
               />
-              <div className="ends" aria-hidden="true">
-                <span>lower paid</span>
-                <span>higher paid</span>
+            ) : (
+              <p className="waiting">
+                {failed ? "The data did not load. Refresh the page to try again." : "Threading 34 subjects"}
+              </p>
+            )}
+          </figure>
+
+          <div className="side">
+            <div className="controls">
+              <div className="field">
+                <label htmlFor="subject">Your subject, or tap its thread</label>
+                <select
+                  id="subject"
+                  value={subject ? slug(subject.name) : ""}
+                  disabled={!d}
+                  onChange={(e) => {
+                    setSubjectSlug(e.target.value);
+                    setUni(null);
+                  }}
+                >
+                  {!d && <option value="">Loading subjects</option>}
+                  {sorted.map((s) => (
+                    <option key={s.name} value={slug(s.name)}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
               </div>
+              <div className="field inline">
+                <span id="group-label">Graduates</span>
+                <div className="segmented" role="group" aria-labelledby="group-label">
+                  {GROUPS.map(([k, label]) => (
+                    <button key={k} type="button" aria-pressed={sex === k} onClick={() => setSex(k)}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="field slider">
+                <label htmlFor="place">
+                  Where you land among {subject ? subject.name : "your subject's"} {WHO[sex]}:{" "}
+                  <output htmlFor="place">{place === 50 ? "the middle" : `${ordinal(place)} of 100`}</output>
+                </label>
+                <input
+                  id="place"
+                  type="range"
+                  min={PLACE_MIN}
+                  max={PLACE_MAX}
+                  step={1}
+                  value={place}
+                  onChange={(e) => setPlace(Number(e.target.value))}
+                />
+                <div className="ends" aria-hidden="true">
+                  <span>lower paid</span>
+                  <span>higher paid</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={d && subject ? "answer" : "answer skeleton"} aria-live="polite">
+              {failed ? (
+                <p>The data did not load. Refresh the page to try again.</p>
+              ) : d && subject ? (
+                <Answer d={d} s={subject} sex={sex} place={place} />
+              ) : (
+                <p>Loading every subject</p>
+              )}
             </div>
           </div>
-        </div>
-
-        <div className={d && subject ? "answer" : "answer skeleton"} aria-live="polite">
-          {failed ? (
-            <p>The data did not load. Refresh the page to try again.</p>
-          ) : d && subject ? (
-            <Answer d={d} s={subject} sex={sex} place={place} />
-          ) : (
-            <p>Loading every subject</p>
-          )}
         </div>
 
         {d && subject && <Sections d={d} s={subject} sex={sex} place={place} uni={uni} setUni={setUni} />}
 
         {d && subject && (
           <aside className="signoff">
-            <p>
-              That's your number, worked out the way I wished a calculator had done it for me. More like it at{" "}
-              <a href={PORTFOLIO}>finn-lakin-portfolio.netlify.app</a>.
-            </p>
+            <p>That's your number, worked out the way I wished a calculator had done it for me.</p>
           </aside>
         )}
+
+        <SeriesStrip here="degree-value" />
       </main>
 
       <footer>
@@ -202,8 +243,9 @@ export function App() {
           sustained work or study five years out, no earnings.
         </p>
         <p>
-          Built by Finn Lakin. The method, the code and every check are at{" "}
-          <a href={REPO}>github.com/FinnTech3/degree-value</a>. No cookies, no tracking.
+          Made by Finn Lakin. The method, the code and every check are at{" "}
+          <a href={REPO}>github.com/FinnTech3/degree-value</a>, and the rest of my work is at{" "}
+          <a href={PORTFOLIO}>finn-lakin-portfolio.netlify.app</a>. No cookies, no tracking.
         </p>
       </footer>
     </div>
@@ -223,12 +265,14 @@ function Answer({ d, s, sex, place }: { d: DegreeFile; s: Subject; sex: Sex; pla
         </div>
         <div className="big">
           <span className="num">{Math.round(shown ?? o.years)} years</span>
-          <span className="unit">of repaying a Plan 5 loan</span>
+          <span className="unit">{o.repaid === 0 ? "of holding a Plan 5 loan" : "of repaying a Plan 5 loan"}</span>
         </div>
         <p className="context">
           {o.cleared
             ? `Cleared in ${o.taxYear}, at ${o.age}.`
-            : `Still repaying at ${o.age}, when what is left is written off, in ${o.taxYear}.`}
+            : o.repaid === 0
+              ? `Never earns above the threshold, so nothing is ever repaid. The whole loan is written off at ${o.age}, in ${o.taxYear}.`
+              : `Still repaying at ${o.age}, when what is left is written off, in ${o.taxYear}.`}
         </p>
       </div>
       <div className="answer-side">
@@ -277,16 +321,23 @@ function Sections({
   const clearsFrom = clearingPlace(d, s, sex);
   const card = useMemo(
     () => ({
-      big: `${o.years} years`,
-      unit: o.cleared ? `cleared at ${o.age}` : `still repaying at ${o.age}`,
+      years: o.years,
+      cleared: o.cleared,
+      age: o.age,
       subject: s.name,
       place,
       lines: [
-        `${gbp(o.repaid)} repaid in total, at 2024-25 prices.`,
+        o.repaid === 0
+          ? "Never earns above the threshold, so nothing is ever repaid."
+          : `${gbp(o.repaid)} repaid in total, at 2024-25 prices.`,
         `${pct(s.full)} of ${s.name} graduates clear their loan before it is written off.`,
       ],
+      subjects: d.subjects,
+      start: d.balance_real,
+      graduationAge: d.graduation_age,
+      term: d.term,
     }),
-    [o, s, place],
+    [o, s, place, d],
   );
 
   return (
@@ -308,16 +359,7 @@ function Sections({
         </p>
       </section>
 
-      <section className="two">
-        <div>
-          <h2>Every subject, side by side</h2>
-          <p className="sub">
-            {`The median graduate's years repaying in each of ${d.subjects.length} subjects. In ${d.written_off.length} of them, holding ${pct(d.written_off_share)} of graduates, the typical graduate is still repaying when the loan is written off.`}
-          </p>
-          <div className="fig">
-            <SubjectsChart subjects={d.subjects} current={s.name} term={d.term} />
-          </div>
-        </div>
+      <section>
         <div>
           <h2>Starting pay is a poor guide</h2>
           <p className="sub">

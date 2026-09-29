@@ -44,7 +44,7 @@ export function PlaceChart({ d, places, place, subject }: Props) {
           </g>
         ))}
         <text className="c-note" x={L} y={T - 12}>
-          years repaying, to a limit of {d.term}: anything left at {d.graduation_age + d.term} is written off
+          years repaying, at most {d.term}
         </text>
         <polyline points={pts} fill="none" className="c-rest-line" strokeWidth={3} strokeLinejoin="round" />
         <line className="c-you-line" x1={x(place)} x2={x(place)} y1={y(you)} y2={B} strokeDasharray="3 3" />
