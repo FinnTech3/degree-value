@@ -86,9 +86,30 @@ gap between subjects is really a gap in who studies them. It is not a causal
 estimate: graduates with the same grades still chose different subjects for
 reasons that may also affect their pay.
 
+## Why draw the loan as a thread, and not a bar?
+
+A bar chart of "years repaying" says 40 for ten subjects and stops there. It
+cannot show that the median psychology graduate has repaid £40,262 by 61 while
+the median creative arts graduate has repaid £20,793, or that a loan can grow
+for years before it starts to shrink. Thickness is the balance still owed, so
+the shape carries both: how long, and how much of it was still there.
+
+All 34 threads start from the same balance, so they leave one spool at 21 and
+fan out to their rows over the first five years. Thickness is measured across
+the thread rather than straight up, or a thread would look pinched where it
+slopes through the fan.
+
+## Why not draw the reader's own thread?
+
+The pipeline writes one balance path per subject, for its median graduate. A
+path for every place on the slider would be 91 times the data for a line most
+readers would never look at. So the reader's own place moves the answer and
+the marker on their subject's thread, and the thread itself stays the median's.
+The page says whose it is.
+
 ## Why no charting library?
 
-The charts are a line, a dot plot and a band. Drawn as SVG directly they
-resize to the screen so their text stays readable on a phone, take their
+The charts are a line, a dot plot, a band and the loom. Drawn as SVG directly
+they resize to the screen so their text stays readable on a phone, take their
 colours from CSS so a change of theme needs no redraw, and keep the page under
-60 KB of JavaScript.
+65 KB of JavaScript.

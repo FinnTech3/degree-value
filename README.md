@@ -155,6 +155,12 @@ move most.
   from where they land among their subject's graduates. The median graduate's
   loan and the share who clear it are therefore exact, not simulated, and they
   are what the tool's slider shows at its middle.
+- **The loom.** Each subject's thread is what its median graduate still owes at
+  the end of each year, in 2024-25 prices, written out by the same run that
+  gives the subject's figures. The thread is as thick as that balance, so it
+  swells while interest outruns repayments, thins as they catch up, and ends in
+  a knot the year the loan is cleared. Nine run to the right-hand edge and fray:
+  those are the loans written off at 61.
 
 More on each choice in [docs/DESIGN-DECISIONS.md](docs/DESIGN-DECISIONS.md).
 Every source, address and checksum is in [docs/SOURCES.md](docs/SOURCES.md).
