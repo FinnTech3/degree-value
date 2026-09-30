@@ -2,7 +2,7 @@
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { type DegreeFile, clearingPlace, outcome, shareBelow, slug, taxYear, universities } from "./degree";
+import { type DegreeFile, clearingPlace, looksLikeDegreeFile, outcome, shareBelow, slug, taxYear, universities } from "./degree";
 
 const d = JSON.parse(readFileSync("public/data/degree.json", "utf8")) as DegreeFile;
 const bySubject = (n: string) => d.subjects.find((s) => s.name === n)!;
@@ -72,5 +72,15 @@ describe("universities", () => {
     const unis = universities(d, bySubject("Economics"));
     expect(shareBelow(unis, 0)).toBe(0);
     expect(shareBelow(unis, 1e9)).toBe(1);
+  });
+});
+
+describe("the load guard", () => {
+  // A file that parses to the wrong shape used to reach render and blank the
+  // page; the guard sends it to the "did not load" message instead.
+  it("accepts the real file and rejects anything that is not it", () => {
+    expect(looksLikeDegreeFile(d)).toBe(true);
+    for (const bad of [null, undefined, {}, [], [1, 2, 3], { subjects: [] }, { subjects: {} }, "text", 5])
+      expect(looksLikeDegreeFile(bad)).toBe(false);
   });
 });

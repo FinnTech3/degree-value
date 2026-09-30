@@ -6,6 +6,7 @@ import {
   type Sex,
   type Subject,
   clearingPlace,
+  looksLikeDegreeFile,
   outcome,
   shareBelow,
   slug,
@@ -70,8 +71,11 @@ export function App() {
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}data/degree.json`)
-      .then((r) => r.json() as Promise<DegreeFile>)
-      .then(setD)
+      .then((r) => r.json())
+      .then((file) => {
+        if (!looksLikeDegreeFile(file)) throw new Error("unexpected data shape");
+        setD(file);
+      })
       .catch(() => setFailed(true));
   }, []);
 

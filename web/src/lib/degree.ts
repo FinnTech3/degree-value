@@ -129,3 +129,16 @@ export function slug(name: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
+
+/**
+ * True when a parsed JSON body looks like the degree file, rather than an
+ * error page, an empty object, or a stale deploy's wrong file. It checks only
+ * the top-level fields the page dereferences at render, enough to route a bad
+ * shape to the "did not load" message instead of a blank screen; the pipeline
+ * guarantees the rest.
+ */
+export function looksLikeDegreeFile(x: unknown): x is DegreeFile {
+  if (typeof x !== "object" || x === null) return false;
+  const f = x as Partial<DegreeFile>;
+  return Array.isArray(f.subjects) && f.subjects.length > 0 && typeof f.term === "number";
+}
