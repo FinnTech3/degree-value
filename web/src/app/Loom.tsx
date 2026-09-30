@@ -132,7 +132,7 @@ export function Loom({ d, current, onPick, you }: Props) {
   const curText = cur.s.cleared ? `${cur.s.name}: cleared at ${curEnd}` : `${cur.s.name}: still owed at ${end}`;
   const curLabel = place(curText, Math.min(W - R, x(curEnd) + 4));
   const cleared = rows.filter((r) => r.s.cleared);
-  const quickest = rows[0]!;
+  const quickest = cleared[0]!;
 
   return (
     <div ref={ref} className="loom-wrap">
